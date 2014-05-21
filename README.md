@@ -1,6 +1,6 @@
 vzcloud-riak
 ============
-------------
+
 
 Intro
 ---------------------
@@ -17,7 +17,7 @@ Local Setup
 
  - Install Basho Ansible Galaxy riak role
 
-      `` ansible-galaxy install basho.riak basho.riak-common``
+      ``ansible-galaxy install basho.riak basho.riak-common``
 
 
 Cloud Setup
@@ -34,18 +34,24 @@ Cloud Setup
 
 Riak cluster Setup
 -----
+
 - Grab vzcloud-riak helper repo
-```sh
+
+```
 git clone https://github.com/davidx/vzcloud-riak
 cd vzcloud-riak
-cd riak```
+cd riak
+
+```
 
 - Set cluster IP addresses
  
- ```vi inventory/hosts```
+```
+vi inventory/hosts
+```
 
  
- ```
+```
 [riak_cluster]
 204.0.52.214
 204.0.52.248
