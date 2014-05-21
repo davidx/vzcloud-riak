@@ -60,7 +60,9 @@ vi inventory/hosts
 204.0.52.228
 
 [riak_servers:children]
-riak_cluster```
+riak_cluster
+```
+
 
 - Disable iptables on all hosts. ( todo: manage rules in ansible ) 
 
