@@ -1,0 +1,55 @@
+global
+        log 127.0.0.1     local0
+        log 127.0.0.1     local1 notice
+        maxconn           256000
+        chroot            /var/lib/haproxy
+        user              haproxy
+        group             haproxy
+        spread-checks     5
+        daemon
+        quiet
+
+defaults
+        log               global
+        option            dontlognull
+        option            redispatch
+        option            allbackups
+        maxconn           256000
+        timeout connect   5000
+
+backend riak_rest_backend
+       mode               http
+       balance            roundrobin
+       option             httpchk GET /ping
+       option             httplog
+{% for host in groups['riak_cluster'] %}
+       server {{ host }} {{ host }}:8098 maxconn 1024 check
+{% endfor %}
+
+
+frontend riak_rest
+       bind               0.0.0.0:8098
+       mode               http
+       option             contstats
+       default_backend    riak_rest_backend
+
+
+backend riak_protocol_buffer_backend
+       balance            leastconn
+       mode               tcp
+       option             tcpka
+       option             srvtcpka
+{% for host in groups['riak_cluster'] %}
+       server {{host}} {{host}}:8087 maxconn 1024 check
+{% endfor %}
+
+
+frontend riak_protocol_buffer
+       bind               0.0.0.0:8087
+       mode               tcp
+       option             tcplog
+       option             contstats
+       mode               tcp
+       option             tcpka
+       option             srvtcpka
+       default_backend    riak_protocol_buffer_backend

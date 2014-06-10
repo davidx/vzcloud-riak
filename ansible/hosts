@@ -1,0 +1,12 @@
+[riak_cluster]
+10.10.0.3
+10.10.0.4
+10.10.0.5
+10.10.0.6
+10.10.0.7
+
+[riak_servers:children]
+riak_cluster
+
+[haproxy_cluster]
+204.151.52.214

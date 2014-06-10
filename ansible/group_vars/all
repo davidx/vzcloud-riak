@@ -1,4 +1,4 @@
 riak_iface: eth0
 gather_facts: no
 
-ansible_ssh_user: vzcloud
+#ansible_ssh_user: vzcloud

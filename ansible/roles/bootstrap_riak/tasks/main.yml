@@ -1,0 +1,11 @@
+- name: add default gateway
+  lineinfile:
+    dest=/etc/sysconfig/network
+    line="GATEWAY={{ hostvars[groups['haproxy_cluster'][0] }}"
+    regexp="^GATEWAY="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+

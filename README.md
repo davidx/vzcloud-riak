@@ -25,7 +25,7 @@ Cloud Setup
 
 - Create VM Instances
  - Login to vzcloud.  ( https://iadm1.cloud.verizon.com )
- - Launch 5 VMs. (Centos 6.5)
+ - Launch 6 VMs. (Centos 6.5)
  - Add public network, reserve, allocate and capture public IP.
  - Configure Firewall (Example AWS Rules): 
    
@@ -41,20 +41,8 @@ cd vzcloud-riak
 cd riak```
 
 - Set cluster IP addresses
- 
- ```vi inventory/hosts```
 
- 
- ```
-[riak_cluster]
-204.0.52.214
-204.0.52.248
-204.0.52.220
-204.0.52.238
-204.0.52.228
-
-[riak_servers:children]
-riak_cluster```
+``./generate_hosts.sh  202.12.32.12:10.10.10.1,10.10.10.3,10.10.10.4
 
 - Disable iptables on all hosts. ( todo: manage rules in ansible ) 
 
@@ -70,7 +58,7 @@ riak_cluster```
  
  or
  ---
-  ``sh run_ansible.sh``
+  ``sh run_ansible_remote.sh``
 
  This step will: 
   - Bootstrap nodes to ensure basic dependencies.

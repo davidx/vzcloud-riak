@@ -1,0 +1,12 @@
+mode: tcp
+
+# Port on which HAProxy should listen
+listenport: 8080
+
+# A name for the proxy daemon, this wil be the suffix in the logs.
+daemonname: riakcluster
+
+# Balancing Algorithm.
+balance: roundrobin
+
+iface: '{{ ansible_default_ipv4.interface }}'

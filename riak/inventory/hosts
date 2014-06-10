@@ -1,9 +1,0 @@
-[riak_cluster]
-204.0.52.214
-204.0.52.248
-204.0.52.220
-204.0.52.238
-204.0.52.228
-
-[riak_servers:children]
-riak_cluster
