@@ -1,0 +1,12 @@
+---
+- name: install curl
+  apt: name=curl state=present update_cache=yes cache_valid_time=86400
+
+- stat: path=/etc/apt/sources.list.d/basho_riak.list
+  register: basho_riak_repo_installed
+
+- name: update pam configuration
+  lineinfile: line="session    required   pam_limits.so" dest={{ item }} regexp="session    required   pam_limits.so" insertafter="^# end of pam-auth-update config"
+  with_items:
+    - /etc/pam.d/common-session
+    - /etc/pam.d/common-session-noninteractive
