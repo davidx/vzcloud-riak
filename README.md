@@ -1,90 +1,38 @@
-vzcloud-riak
-============
 
+How to setup a Riak image on Verizon Cloud
+-----------------------
 
-Intro
----------------------
+- Tested on AWS EC2 AMI image: Debian 7 (ami-646ee40c)
 
-How to deploy Riak in vzcloud.
+### Image Bootstrap ###
+- Install prerequisites:
+``````````
+$> sudo -s
+$> apt-get update
+$> apt-get install -y curl python 
+$> curl https://packagecloud.io/gpg.key | sudo apt-key add -
+$> sudo apt-get install -y --force-yes  apt-transport-https
+$> apt-get update
+$> echo "ulimit -n 65539" >> /etc/default/riak
+``````````
+- Add basho source 
 
-
-Local Setup
----------------------
- - Install Xcode
- - Install Ansible
-
-      ``sudo easy_install pip && sudo pip install ansible --quiet``
-
- - Install Basho Ansible Galaxy riak role
-
-      ``ansible-galaxy install basho.riak basho.riak-common``
-
-
-Cloud Setup
----------------------
-
-- Create VM Instances
- - Login to vzcloud.  ( https://iadm1.cloud.verizon.com )
- - Launch 6 VMs. (Centos 6.5)
- - Add public network, reserve, allocate and capture public IP.
- - Configure Firewall (Example AWS Rules): 
-   
-   ![Alt text](http://photos.adron.me/Software/Software-Development/Installing-Riak-on-AWS/i-L32qd67/0/625x162/install%204-625x162.png "Optional title")
-
-
-Riak cluster Setup
------
-
-- Grab vzcloud-riak helper repo
-
-```
-git clone https://github.com/davidx/vzcloud-riak
-cd vzcloud-riak
-cd riak
-
-```
-
-- Set cluster IP addresses
-
-``./generate_hosts.sh  202.12.32.12:10.10.10.1,10.10.10.3,10.10.10.4
- 
-
-- Disable iptables on all hosts. ( todo: manage rules in ansible ) 
-
-  ``iptables -F`` 
-  
-- Deploy your ssh key on remote nodes ( todo: preset key )
-  
- ``vi /root/ssh/authorized_keys``
-
-- Run Ansible to bootstrap Riak cluster:
-
- ``ansible-playbook setup_riak.yml -i inventory/hosts``
- 
- or
- ---
-  ``sh run_ansible_remote.sh``
-
- This step will: 
-  - Bootstrap nodes to ensure basic dependencies.
-  - Install and configure Riak.
-  - Join nodes together into a working cluster.
-
-Todo
----
-
-- Develop custom ansible playbook for tuning riak on vzcloud default image.
-- Integrate ansible playbook for iptables .
-- Develop Haproxy and orchestration node playbook.
-- Create template for riak nodes.
-
-Links
-------
-
-- https://devopsu.com/guides/ansible-mac-osx.html
-- http://docs.basho.com/riak/latest/
-- http://docs.basho.com/riak/latest/ops/advanced/security/
-- https://github.com/geerlingguy/ansible-role-firewall
-
+ ``````````
+$> printf "deb https://packagecloud.io/basho/riak/debian/ wheezy main\n deb-src https://packagecloud.io/basho/riak/debian/ wheezy main" > /etc/apt/sources.list.d/basho.list 
+$> apt-get update
+ ``````````
+- Install Riak
+ ``````````
+$> apt-get update
+$> apt-get install riak
+ ``````````
+- Configure Riak
+ ``````````
+$> sed -i.bak 's/127.0.0.1/0.0.0.0/' /etc/riak/riak.conf
+ ``````````
+- Start Riak
+ ``````````
+$> riak start
+ ``````````
 
 
